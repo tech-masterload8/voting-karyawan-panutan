@@ -39,7 +39,23 @@
     .message{margin-top:20px;padding:10px;border-radius:8px;font-weight:500;}
     .success{background:#e8f6ec;color:#137a2d;}
     .error{background:#fcecec;color:#a30000;}
-    #logout{margin-top:10px;text-align:center;color:#777;font-size:14px;cursor:pointer;}
+    .logout-btn {
+      background: #e63946;
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 16px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s ease;
+    }
+    .logout-btn:hover {
+      background: #c92d38;
+    }
     .outlet-btn{
       display:flex;align-items:center;justify-content:center;gap:12px;
       background:#fff;border:2px solid #ccc;border-radius:12px;
@@ -104,7 +120,7 @@
     <img src="MasterGrosir8.png" class="outlet-logo" alt="MasterGrosir8">
     <span class="outlet-name">Master Grosir 8</span>
   </div>
-  <div id="logout" style="margin-top:24px;">Keluar</div>
+  <button id="logout" class="logout-btn">Keluar</button>
 </div>
 
 <!-- LOADER -->
@@ -130,7 +146,7 @@
 
   <div id="message" class="message hidden"></div>
   <div id="countdownBar" class="hidden"></div>
-  <div id="logout2">Keluar</div>
+  <button id="logout2" class="logout-btn">Keluar</button>
 </div>
 
 <script>
@@ -275,3 +291,4 @@ document.getElementById("logout2").onclick=()=>{
 </script>
 </body>
 </html>
+
