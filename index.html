@@ -7,96 +7,77 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
-      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-      background: #f6f8fa;
-      color: #222;
-      margin: 0;
-      padding: 0;
+      font-family:'Segoe UI',Roboto,Arial,sans-serif;
+      background:#f6f8fa;
+      color:#222;
+      margin:0;
+      padding:0;
     }
     .container {
-      max-width: 480px;
-      margin: 60px auto;
-      background: white;
-      padding: 32px;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,.1);
-      transition: opacity .3s ease;
+      max-width:480px;
+      margin:60px auto;
+      background:white;
+      padding:32px;
+      border-radius:16px;
+      box-shadow:0 4px 16px rgba(0,0,0,.1);
+      transition:opacity .3s ease;
     }
-    h1 { text-align: center; color: #0b74d1; }
-    label { display: block; margin-top: 20px; font-weight: 600; }
-    input[type=text], textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-top: 6px;
-      font-size: 15px;
+    h1{text-align:center;color:#0b74d1;}
+    label{display:block;margin-top:20px;font-weight:600;}
+    input[type=text],textarea{
+      width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;
+      margin-top:6px;font-size:15px;
     }
-    textarea { resize: vertical; min-height: 70px; }
-    button {
-      background: #0b74d1;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 24px;
-      width: 100%;
-      transition: background .2s ease;
+    textarea{resize:vertical;min-height:70px;}
+    button{
+      background:#0b74d1;color:white;border:none;border-radius:8px;
+      padding:12px 20px;font-size:16px;cursor:pointer;
+      margin-top:24px;width:100%;transition:background .2s ease;
     }
-    button:hover { background: #095ca7; }
-    .hidden { display: none; }
-    .message { margin-top: 20px; padding: 10px; border-radius: 8px; font-weight: 500; }
-    .success { background: #e8f6ec; color: #137a2d; }
-    .error { background: #fcecec; color: #a30000; }
-    #logout { margin-top: 10px; text-align: center; color: #777; font-size: 14px; cursor: pointer; }
-    .outlet-btn {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      background: #fff; border: 2px solid #ccc; border-radius: 12px;
-      padding: 12px; cursor: pointer; margin-top: 16px; transition: .2s;
+    button:hover{background:#095ca7;}
+    .hidden{display:none;}
+    .message{margin-top:20px;padding:10px;border-radius:8px;font-weight:500;}
+    .success{background:#e8f6ec;color:#137a2d;}
+    .error{background:#fcecec;color:#a30000;}
+    #logout{margin-top:10px;text-align:center;color:#777;font-size:14px;cursor:pointer;}
+    .outlet-btn{
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      background:#fff;border:2px solid #ccc;border-radius:12px;
+      padding:12px;cursor:pointer;margin-top:16px;transition:.2s;
     }
-    .outlet-btn:hover { border-color: #0b74d1; background: #f0f7ff; }
-    .outlet-logo { width: 64px; height: 64px; object-fit: contain; }
-    .outlet-name { font-size: 18px; font-weight: 600; }
+    .outlet-btn:hover{border-color:#0b74d1;background:#f0f7ff;}
+    .outlet-logo{width:64px;height:64px;object-fit:contain;}
+    .outlet-name{font-size:18px;font-weight:600;}
 
-    /* Loader overlay full-screen */
+    /* Loader overlay */
     #loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background: rgba(255,255,255,0.9);
-      opacity: 0;
-      visibility: hidden;
-      z-index: 999;
-      transition: opacity .4s ease, visibility .4s ease;
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      display:flex;justify-content:center;align-items:center;
+      flex-direction:column;background:rgba(255,255,255,0.9);
+      opacity:0;visibility:hidden;z-index:999;
+      transition:opacity .4s ease,visibility .4s ease;
     }
-    #loader.active {
-      opacity: 1;
-      visibility: visible;
-    }
+    #loader.active{opacity:1;visibility:visible;}
     .spinner {
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #0b74d1;
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
+      border:5px solid #f3f3f3;border-top:5px solid #0b74d1;border-radius:50%;
+      width:60px;height:60px;animation:spin 1s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+
+    /* Countdown bar */
+    #countdownBar {
+      height:6px;
+      background:#0b74d1;
+      width:100%;
+      border-radius:6px;
+      margin-top:8px;
+      transition:width 1s linear;
     }
   </style>
 </head>
 <body>
 
-<!-- ===== LOGIN SCREEN ===== -->
+<!-- LOGIN -->
 <div class="container" id="loginContainer">
   <h1>Masuk untuk Memberikan Suara</h1>
   <div id="g_id_onload"
@@ -112,7 +93,7 @@
        data-logo_alignment="left"></div>
 </div>
 
-<!-- ===== OUTLET SELECTION ===== -->
+<!-- OUTLET SELECTION -->
 <div class="container hidden" id="outletContainer">
   <h1>Pilih Outlet untuk Memberikan Suara</h1>
   <div class="outlet-btn" onclick="selectOutlet('ML8')">
@@ -126,13 +107,13 @@
   <div id="logout" style="margin-top:24px;">Keluar</div>
 </div>
 
-<!-- ===== LOADER ===== -->
+<!-- LOADER -->
 <div id="loader">
   <div class="spinner"></div>
   <p>Sedang memuat daftar kandidat...</p>
 </div>
 
-<!-- ===== VOTING FORM ===== -->
+<!-- VOTING FORM -->
 <div class="container hidden" id="voteContainer">
   <h1>Pemungutan Suara</h1>
   <p id="userInfo"></p>
@@ -148,149 +129,149 @@
   <button id="btnKirim" disabled>Kirim Suara</button>
 
   <div id="message" class="message hidden"></div>
+  <div id="countdownBar" class="hidden"></div>
   <div id="logout2">Keluar</div>
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxp7AMLpBvEmy6ZL5FT7lxf1KE7jzHm7oRgD9cDDejJm2edLHGqXztdkM3LxpYLXvqdOA/exec";
-let googleIdToken = "", userEmail = "", currentOutlet = "", candidateList = [];
+let googleIdToken="", userEmail="", currentOutlet="", candidateList=[];
 
-// --- LOGIN SUCCESS ---
-function onGoogleSignIn(response) {
-  googleIdToken = response.credential;
+// LOGIN
+function onGoogleSignIn(response){
+  googleIdToken=response.credential;
   decodeJwt(response.credential);
   hideLoader();
   document.getElementById("loginContainer").classList.add("hidden");
   document.getElementById("outletContainer").classList.remove("hidden");
 }
 
-// --- DECODE JWT ---
-function decodeJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g,'+').replace(/_/g,'/');
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(c=>'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-  const data = JSON.parse(jsonPayload);
-  userEmail = data.email;
+function decodeJwt(token){
+  const base64Url=token.split('.')[1];
+  const base64=base64Url.replace(/-/g,'+').replace(/_/g,'/');
+  const jsonPayload=decodeURIComponent(atob(base64).split('').map(c=>'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  const data=JSON.parse(jsonPayload);
+  userEmail=data.email;
 }
 
-// --- SHOW / HIDE LOADER ---
-function showLoader() {
-  document.getElementById("loader").classList.add("active");
-}
-function hideLoader() {
-  document.getElementById("loader").classList.remove("active");
-}
+// Loader
+function showLoader(){document.getElementById("loader").classList.add("active");}
+function hideLoader(){document.getElementById("loader").classList.remove("active");}
 
-// --- RESET FORM ---
-function resetForm() {
-  document.getElementById("kandidat").value = "";
-  document.getElementById("alasan").value = "";
+// Reset form
+function resetForm(){
+  document.getElementById("kandidat").value="";
+  document.getElementById("alasan").value="";
   document.getElementById("message").classList.add("hidden");
-  document.getElementById("btnKirim").disabled = true;
-  document.getElementById("kandidat").disabled = true;
+  document.getElementById("countdownBar").classList.add("hidden");
+  document.getElementById("btnKirim").disabled=true;
+  document.getElementById("kandidat").disabled=true;
 }
 
-// --- SELECT OUTLET ---
-function selectOutlet(outlet) {
-  currentOutlet = outlet;
-  resetForm(); // clear old data
+// Select outlet
+function selectOutlet(outlet){
+  currentOutlet=outlet;
+  resetForm();
   document.getElementById("outletContainer").classList.add("hidden");
   showLoader();
   loadCandidates(outlet);
 }
 
-// --- LOAD CANDIDATES ---
-async function loadCandidates(outlet) {
-  try {
-    const res = await fetch(API_URL + "?action=getCandidates&outlet=" + outlet);
-    const json = await res.json();
-    if (json.ok) {
-      candidateList = json.data.kandidat || [];
-      const list = document.getElementById("kandidatList");
-      list.innerHTML = candidateList.map(n => `<option value="${n}">`).join("");
-
+// Load candidates
+async function loadCandidates(outlet){
+  try{
+    const res=await fetch(API_URL+"?action=getCandidates&outlet="+outlet);
+    const json=await res.json();
+    if(json.ok){
+      candidateList=json.data.kandidat||[];
+      const list=document.getElementById("kandidatList");
+      list.innerHTML=candidateList.map(n=>`<option value="${n}">`).join("");
       hideLoader();
       document.getElementById("voteContainer").classList.remove("hidden");
-      document.getElementById("userInfo").innerHTML = "Masuk sebagai <b>" + userEmail + "</b>";
-      document.getElementById("selectedOutlet").innerHTML = "Outlet: <b>" + (outlet === "ML8" ? "Master Load 8" : "Master Grosir 8") + "</b>";
-      document.getElementById("kandidat").disabled = false;
-      document.getElementById("btnKirim").disabled = false;
-    } else {
-      throw new Error("Gagal memuat daftar kandidat.");
-    }
-  } catch (err) {
+      document.getElementById("userInfo").innerHTML="Masuk sebagai <b>"+userEmail+"</b>";
+      document.getElementById("selectedOutlet").innerHTML="Outlet: <b>"+(outlet==="ML8"?"Master Load 8":"Master Grosir 8")+"</b>";
+      document.getElementById("kandidat").disabled=false;
+      document.getElementById("btnKirim").disabled=false;
+    } else throw new Error("Gagal memuat daftar kandidat.");
+  }catch(err){
     hideLoader();
-    showMessage("Gagal memuat kandidat: " + err.message, "error");
+    showMessage("Gagal memuat kandidat: "+err.message,"error");
     document.getElementById("outletContainer").classList.remove("hidden");
   }
 }
 
-// --- SEND VOTE ---
-document.getElementById("btnKirim").addEventListener("click", async () => {
-  const kandidat = document.getElementById("kandidat").value.trim();
-  const alasan = document.getElementById("alasan").value.trim();
-  if (!candidateList.includes(kandidat)) {
-    showMessage("Nama kandidat tidak terdaftar!", "error");
-    return;
-  }
-  if (!alasan) {
-    showMessage("Silakan isi alasan pemilihan.", "error");
-    return;
-  }
-  showMessage("Mengirim suara...", "info");
-  document.getElementById("btnKirim").disabled = true;
+// Send vote
+document.getElementById("btnKirim").addEventListener("click",async()=>{
+  const kandidat=document.getElementById("kandidat").value.trim();
+  const alasan=document.getElementById("alasan").value.trim();
+  if(!candidateList.includes(kandidat)){showMessage("Nama kandidat tidak terdaftar!","error");return;}
+  if(!alasan){showMessage("Silakan isi alasan pemilihan.","error");return;}
+  showMessage("Mengirim suara...","info");
+  document.getElementById("btnKirim").disabled=true;
 
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=UTF-8" },
-      body: JSON.stringify({
-        action: "submitVote",
-        id_token: googleIdToken,
-        outlet: currentOutlet,
-        kandidat: kandidat,
-        alasan: alasan
+  try{
+    const res=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=UTF-8"},
+      body:JSON.stringify({
+        action:"submitVote",
+        id_token:googleIdToken,
+        outlet:currentOutlet,
+        kandidat:kandidat,
+        alasan:alasan
       })
     });
-    const json = await res.json();
-    if (json.ok && json.data.status === "berhasil") {
-      showMessage(json.data.message, "success");
-      resetForm();
-      // Auto return to outlet selection after 2 seconds
-      setTimeout(() => {
-        document.getElementById("voteContainer").classList.add("hidden");
-        document.getElementById("outletContainer").classList.remove("hidden");
-      }, 10000);
-    } else if (json.ok && json.data.status === "sudah_vote") {
-      showMessage(json.data.message, "error");
-    } else {
-      showMessage("Terjadi kesalahan: " + (json.error || "tidak diketahui."), "error");
+    const json=await res.json();
+    if(json.ok&&json.data.status==="berhasil"){
+      showMessage(json.data.message,"success");
+      startCountdown(10); // 10 detik sebelum kembali
+    }else if(json.ok&&json.data.status==="sudah_vote"){
+      showMessage(json.data.message,"error");
+    }else{
+      showMessage("Terjadi kesalahan: "+(json.error||"tidak diketahui."),"error");
     }
-  } catch (err) {
-    showMessage("Gagal mengirim suara: " + err.message, "error");
-  } finally {
-    document.getElementById("btnKirim").disabled = false;
+  }catch(err){
+    showMessage("Gagal mengirim suara: "+err.message,"error");
+  }finally{
+    document.getElementById("btnKirim").disabled=false;
   }
 });
 
-// --- SHOW MESSAGE ---
-function showMessage(text, type) {
-  const msg = document.getElementById("message");
-  msg.className = "message " + (type === "error" ? "error" : "success");
-  msg.textContent = text;
+// Countdown progress
+function startCountdown(seconds){
+  const bar=document.getElementById("countdownBar");
+  bar.classList.remove("hidden");
+  let remaining=seconds;
+  bar.style.width="100%";
+  const timer=setInterval(()=>{
+    remaining--;
+    bar.style.width=(remaining/seconds*100)+"%";
+    if(remaining<=0){
+      clearInterval(timer);
+      bar.classList.add("hidden");
+      resetForm();
+      document.getElementById("voteContainer").classList.add("hidden");
+      document.getElementById("outletContainer").classList.remove("hidden");
+    }
+  },1000);
+}
+
+// Show message
+function showMessage(text,type){
+  const msg=document.getElementById("message");
+  msg.className="message "+(type==="error"?"error":"success");
+  msg.textContent=text;
   msg.classList.remove("hidden");
 }
 
-// --- LOGOUT BOTH ---
-document.getElementById("logout").onclick =
-document.getElementById("logout2").onclick = () => {
-  document.querySelectorAll(".container").forEach(c => c.classList.add("hidden"));
+// Logout
+document.getElementById("logout").onclick=
+document.getElementById("logout2").onclick=()=>{
+  document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
   document.getElementById("loginContainer").classList.remove("hidden");
-  hideLoader();
-  resetForm();
-  googleIdToken = ""; userEmail = ""; currentOutlet = ""; candidateList = [];
+  hideLoader();resetForm();
+  googleIdToken="";userEmail="";currentOutlet="";candidateList=[];
 };
 </script>
 </body>
 </html>
-
