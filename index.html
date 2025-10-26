@@ -2,210 +2,200 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Karyawan Panutan Master8 Group</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Pemungutan Suara Karyawan Panutan</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    body {
-      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-      background: #f6f8fa;
-      color: #222;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 480px;
-      margin: 60px auto;
-      background: white;
-      padding: 32px;
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #0b74d1;
-    }
-    label {
-      display: block;
-      margin-top: 20px;
-      font-weight: 600;
-    }
-    input[type=text], textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-top: 6px;
-      font-size: 15px;
-    }
-    textarea { resize: vertical; min-height: 70px; }
-    button {
-      background: #0b74d1;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 24px;
-      width: 100%;
-    }
-    button:hover { background: #095ca7; }
-    .hidden { display: none; }
-    .message {
-      margin-top: 20px;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 500;
-    }
-    .success { background: #e8f6ec; color: #137a2d; }
-    .error { background: #fcecec; color: #a30000; }
-    #logout {
-      margin-top: 10px;
-      text-align: center;
-      color: #777;
-      font-size: 14px;
-      cursor: pointer;
-    }
+    body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#f6f8fa;color:#222;margin:0;padding:0;}
+    .container{max-width:480px;margin:60px auto;background:white;padding:32px;border-radius:16px;
+               box-shadow:0 4px 16px rgba(0,0,0,.1);}
+    h1{text-align:center;color:#0b74d1;}
+    label{display:block;margin-top:20px;font-weight:600;}
+    input[type=text],textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:6px;font-size:15px;}
+    textarea{resize:vertical;min-height:70px;}
+    button{background:#0b74d1;color:white;border:none;border-radius:8px;padding:12px 20px;font-size:16px;
+           cursor:pointer;margin-top:24px;width:100%;}
+    button:hover{background:#095ca7;}
+    .hidden{display:none;}
+    .message{margin-top:20px;padding:10px;border-radius:8px;font-weight:500;}
+    .success{background:#e8f6ec;color:#137a2d;}
+    .error{background:#fcecec;color:#a30000;}
+    #logout{margin-top:10px;text-align:center;color:#777;font-size:14px;cursor:pointer;}
+    .outlet-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:2px solid #ccc;
+                border-radius:12px;padding:12px;cursor:pointer;margin-top:16px;transition:.2s;}
+    .outlet-btn:hover{border-color:#0b74d1;background:#f0f7ff;}
+    .outlet-logo{width:64px;height:64px;object-fit:contain;}
+    .outlet-name{font-size:18px;font-weight:600;}
+    #loader{display:flex;justify-content:center;align-items:center;flex-direction:column;padding:20px;}
+    .spinner{border:5px solid #f3f3f3;border-top:5px solid #0b74d1;border-radius:50%;width:50px;height:50px;
+             animation:spin 1s linear infinite;}
+    @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
   </style>
 </head>
 <body>
 
+<!-- ===== LOGIN SCREEN ===== -->
 <div class="container" id="loginContainer">
   <h1>Masuk untuk Memberikan Suara</h1>
   <div id="g_id_onload"
-    data-client_id="38710938865-po785nub0nkh23ucd9koljh3qh135612.apps.googleusercontent.com"
-    data-callback="onGoogleSignIn"
-    data-auto_prompt="false">
-  </div>
+       data-client_id="YOUR_GOOGLE_CLIENT_ID"
+       data-callback="onGoogleSignIn"
+       data-auto_prompt="false"></div>
   <div class="g_id_signin"
-    data-type="standard"
-    data-shape="rectangular"
-    data-theme="outline"
-    data-text="sign_in_with"
-    data-size="large"
-    data-logo_alignment="left">
-  </div>
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="outline"
+       data-text="sign_in_with"
+       data-size="large"
+       data-logo_alignment="left"></div>
 </div>
 
+<!-- ===== OUTLET SELECTION ===== -->
+<div class="container hidden" id="outletContainer">
+  <h1>Pilih Outlet untuk Memberikan Suara</h1>
+  <div class="outlet-btn" onclick="selectOutlet('ML8')">
+    <img src="MasterLoad8.png" class="outlet-logo" alt="MasterLoad8">
+    <span class="outlet-name">Master Load 8</span>
+  </div>
+  <div class="outlet-btn" onclick="selectOutlet('MG8')">
+    <img src="MasterGrosir8.png" class="outlet-logo" alt="MasterGrosir8">
+    <span class="outlet-name">Master Grosir 8</span>
+  </div>
+  <div id="logout" style="margin-top:24px;">Keluar</div>
+</div>
+
+<!-- ===== LOADER ===== -->
+<div class="container hidden" id="loader">
+  <div class="spinner"></div>
+  <p>Sedang memuat daftar kandidat...</p>
+</div>
+
+<!-- ===== VOTING FORM ===== -->
 <div class="container hidden" id="voteContainer">
-  <h1>Karyawan Panutan Master8 Group</h1>
+  <h1>Pemungutan Suara</h1>
   <p id="userInfo"></p>
+  <p id="selectedOutlet"></p>
 
   <label for="kandidat">Pilih Kandidat</label>
-  <input list="kandidatList" id="kandidat" placeholder="Ketik nama kandidat..." required>
+  <input list="kandidatList" id="kandidat" placeholder="Ketik nama kandidat..." disabled required>
   <datalist id="kandidatList"></datalist>
 
   <label for="alasan">Alasan Anda Memilih Kandidat Ini</label>
   <textarea id="alasan" placeholder="Tulis alasan Anda di sini..." required></textarea>
 
-  <button id="btnKirim">Kirim Suara</button>
+  <button id="btnKirim" disabled>Kirim Suara</button>
 
   <div id="message" class="message hidden"></div>
-  <div id="logout">Keluar</div>
+  <div id="logout2">Keluar</div>
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxp7AMLpBvEmy6ZL5FT7lxf1KE7jzHm7oRgD9cDDejJm2edLHGqXztdkM3LxpYLXvqdOA/exec"
-let googleIdToken = "";
-let userEmail = "";
+const API_URL="YOUR_APPS_SCRIPT_URL";
+let googleIdToken="",userEmail="",currentOutlet="",candidateList=[];
 
-// Saat login sukses
-function onGoogleSignIn(response) {
-  googleIdToken = response.credential;
+// --- LOGIN SUCCESS ---
+function onGoogleSignIn(response){
+  googleIdToken=response.credential;
   decodeJwt(response.credential);
   document.getElementById("loginContainer").classList.add("hidden");
-  document.getElementById("voteContainer").classList.remove("hidden");
-  loadCandidates();
+  document.getElementById("outletContainer").classList.remove("hidden");
 }
 
-// Decode email dari token JWT (tanpa library)
-function decodeJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-  const data = JSON.parse(jsonPayload);
-  userEmail = data.email;
-  document.getElementById("userInfo").innerHTML = 
-    "Masuk sebagai <b>" + userEmail + "</b>";
+// --- DECODE JWT ---
+function decodeJwt(token){
+  const base64Url=token.split('.')[1];
+  const base64=base64Url.replace(/-/g,'+').replace(/_/g,'/');
+  const jsonPayload=decodeURIComponent(atob(base64).split('').map(c=>'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  const data=JSON.parse(jsonPayload);
+  userEmail=data.email;
 }
 
-// Ambil daftar kandidat
-async function loadCandidates() {
-  try {
-    const res = await fetch(API_URL + "?action=getCandidates");
-    const json = await res.json();
-    if (json.ok) {
-      const list = document.getElementById("kandidatList");
-      list.innerHTML = json.data.map(n => `<option value="${n}">`).join("");
+// --- SELECT OUTLET ---
+function selectOutlet(outlet){
+  currentOutlet=outlet;
+  document.getElementById("outletContainer").classList.add("hidden");
+  document.getElementById("loader").classList.remove("hidden");
+  loadCandidates(outlet);
+}
+
+// --- LOAD CANDIDATES ---
+async function loadCandidates(outlet){
+  try{
+    const res=await fetch(API_URL+"?action=getCandidates&outlet="+outlet);
+    const json=await res.json();
+    if(json.ok){
+      candidateList=json.data.kandidat||[];
+      const list=document.getElementById("kandidatList");
+      list.innerHTML=candidateList.map(n=>`<option value="${n}">`).join("");
+      document.getElementById("loader").classList.add("hidden");
+      document.getElementById("voteContainer").classList.remove("hidden");
+      document.getElementById("userInfo").innerHTML="Masuk sebagai <b>"+userEmail+"</b>";
+      document.getElementById("selectedOutlet").innerHTML="Outlet: <b>"+(outlet==="ML8"?"Master Load 8":"Master Grosir 8")+"</b>";
+      document.getElementById("kandidat").disabled=false;
+      document.getElementById("btnKirim").disabled=false;
+    }else{
+      throw new Error("Gagal memuat daftar kandidat.");
     }
-  } catch (err) {
-    console.error("Gagal memuat kandidat:", err);
+  }catch(err){
+    showMessage("Gagal memuat kandidat: "+err.message,"error");
+    document.getElementById("loader").classList.add("hidden");
+    document.getElementById("outletContainer").classList.remove("hidden");
   }
 }
 
-// Kirim suara
-document.getElementById("btnKirim").addEventListener("click", async () => {
-  const kandidat = document.getElementById("kandidat").value.trim();
-  const alasan = document.getElementById("alasan").value.trim();
-  const msg = document.getElementById("message");
-
-  if (!kandidat) {
-    showMessage("Silakan pilih kandidat terlebih dahulu.", "error");
-    return;
+// --- SEND VOTE ---
+document.getElementById("btnKirim").addEventListener("click",async()=>{
+  const kandidat=document.getElementById("kandidat").value.trim();
+  const alasan=document.getElementById("alasan").value.trim();
+  if(!candidateList.includes(kandidat)){
+    showMessage("Nama kandidat tidak terdaftar!","error");return;
   }
-  showMessage("Mengirim suara...", "info");
+  if(!alasan){showMessage("Silakan isi alasan pemilihan.","error");return;}
+  showMessage("Mengirim suara...","info");
+  document.getElementById("btnKirim").disabled=true;
 
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=UTF-8" },
-      body: JSON.stringify({
-        action: "submitVote",
-        id_token: googleIdToken,
-        kandidat: kandidat,
-        alasan: alasan
+  try{
+    const res=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=UTF-8"},
+      body:JSON.stringify({
+        action:"submitVote",
+        id_token:googleIdToken,
+        outlet:currentOutlet,
+        kandidat:kandidat,
+        alasan:alasan
       })
     });
-    const json = await res.json();
-    if (json.ok && json.data.status === "berhasil") {
-      showMessage(json.data.message, "success");
-      document.getElementById("btnKirim").disabled = true;
-    } else if (json.ok && json.data.status === "sudah_vote") {
-      showMessage(json.data.message, "error");
-      document.getElementById("btnKirim").disabled = true;
-    } else {
-      showMessage("Terjadi kesalahan: " + (json.error || "tidak diketahui."), "error");
+    const json=await res.json();
+    if(json.ok&&json.data.status==="berhasil"){
+      showMessage(json.data.message,"success");
+    }else if(json.ok&&json.data.status==="sudah_vote"){
+      showMessage(json.data.message,"error");
+    }else{
+      showMessage("Terjadi kesalahan: "+(json.error||"tidak diketahui."),"error");
     }
-  } catch (err) {
-    showMessage("Gagal mengirim suara: " + err.message, "error");
+  }catch(err){
+    showMessage("Gagal mengirim suara: "+err.message,"error");
+  }finally{
+    document.getElementById("btnKirim").disabled=false;
   }
 });
 
-function showMessage(text, type) {
-  const msg = document.getElementById("message");
-  msg.className = "message " + (type === "error" ? "error" : "success");
-  msg.textContent = text;
+// --- SHOW MESSAGE ---
+function showMessage(text,type){
+  const msg=document.getElementById("message");
+  msg.className="message "+(type==="error"?"error":"success");
+  msg.textContent=text;
   msg.classList.remove("hidden");
 }
 
-// Logout manual (hapus tampilan)
-document.getElementById("logout").addEventListener("click", () => {
-  document.getElementById("voteContainer").classList.add("hidden");
+// --- LOGOUT BOTH ---
+document.getElementById("logout").onclick=
+document.getElementById("logout2").onclick=()=>{
+  document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
   document.getElementById("loginContainer").classList.remove("hidden");
-  document.getElementById("message").classList.add("hidden");
-  document.getElementById("alasan").value = "";
-  document.getElementById("kandidat").value = "";
-  googleIdToken = "";
-  userEmail = "";
-});
+  googleIdToken="";userEmail="";currentOutlet="";candidateList=[];
+};
 </script>
 </body>
-
 </html>
-
-
-
-
