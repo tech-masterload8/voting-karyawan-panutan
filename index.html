@@ -6,29 +6,83 @@
   <title>Pemungutan Suara Karyawan Panutan</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
-    body{font-family:'Segoe UI',Roboto,Arial,sans-serif;background:#f6f8fa;color:#222;margin:0;padding:0;}
-    .container{max-width:480px;margin:60px auto;background:white;padding:32px;border-radius:16px;
-               box-shadow:0 4px 16px rgba(0,0,0,.1);}
+    body{
+      font-family:'Segoe UI',Roboto,Arial,sans-serif;
+      background:#f6f8fa;
+      color:#222;
+      margin:0;
+      padding:0;
+    }
+    .container{
+      max-width:480px;
+      margin:60px auto;
+      background:white;
+      padding:32px;
+      border-radius:16px;
+      box-shadow:0 4px 16px rgba(0,0,0,.1);
+      transition:opacity .3s ease;
+    }
     h1{text-align:center;color:#0b74d1;}
     label{display:block;margin-top:20px;font-weight:600;}
-    input[type=text],textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;margin-top:6px;font-size:15px;}
+    input[type=text],textarea{
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:8px;
+      margin-top:6px;
+      font-size:15px;
+    }
     textarea{resize:vertical;min-height:70px;}
-    button{background:#0b74d1;color:white;border:none;border-radius:8px;padding:12px 20px;font-size:16px;
-           cursor:pointer;margin-top:24px;width:100%;}
+    button{
+      background:#0b74d1;
+      color:white;
+      border:none;
+      border-radius:8px;
+      padding:12px 20px;
+      font-size:16px;
+      cursor:pointer;
+      margin-top:24px;
+      width:100%;
+      transition:background .2s ease;
+    }
     button:hover{background:#095ca7;}
     .hidden{display:none;}
     .message{margin-top:20px;padding:10px;border-radius:8px;font-weight:500;}
     .success{background:#e8f6ec;color:#137a2d;}
     .error{background:#fcecec;color:#a30000;}
     #logout{margin-top:10px;text-align:center;color:#777;font-size:14px;cursor:pointer;}
-    .outlet-btn{display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:2px solid #ccc;
-                border-radius:12px;padding:12px;cursor:pointer;margin-top:16px;transition:.2s;}
+    .outlet-btn{
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      background:#fff;border:2px solid #ccc;border-radius:12px;
+      padding:12px;cursor:pointer;margin-top:16px;transition:.2s;
+    }
     .outlet-btn:hover{border-color:#0b74d1;background:#f0f7ff;}
     .outlet-logo{width:64px;height:64px;object-fit:contain;}
     .outlet-name{font-size:18px;font-weight:600;}
-    #loader{display:flex;justify-content:center;align-items:center;flex-direction:column;padding:20px;}
-    .spinner{border:5px solid #f3f3f3;border-top:5px solid #0b74d1;border-radius:50%;width:50px;height:50px;
-             animation:spin 1s linear infinite;}
+
+    /* Loader with fade animation */
+    #loader{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      padding:20px;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .5s ease, visibility .5s ease;
+    }
+    #loader.active{
+      opacity:1;
+      visibility:visible;
+    }
+    .spinner{
+      border:5px solid #f3f3f3;
+      border-top:5px solid #0b74d1;
+      border-radius:50%;
+      width:50px;
+      height:50px;
+      animation:spin 1s linear infinite;
+    }
     @keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
   </style>
 </head>
@@ -65,7 +119,7 @@
 </div>
 
 <!-- ===== LOADER ===== -->
-<div class="container hidden" id="loader">
+<div class="container" id="loader">
   <div class="spinner"></div>
   <p>Sedang memuat daftar kandidat...</p>
 </div>
@@ -97,6 +151,10 @@ let googleIdToken="",userEmail="",currentOutlet="",candidateList=[];
 function onGoogleSignIn(response){
   googleIdToken=response.credential;
   decodeJwt(response.credential);
+
+  // Pastikan loader tidak muncul di tahap login
+  hideLoader();
+
   document.getElementById("loginContainer").classList.add("hidden");
   document.getElementById("outletContainer").classList.remove("hidden");
 }
@@ -114,8 +172,18 @@ function decodeJwt(token){
 function selectOutlet(outlet){
   currentOutlet=outlet;
   document.getElementById("outletContainer").classList.add("hidden");
-  document.getElementById("loader").classList.remove("hidden");
+  showLoader();
   loadCandidates(outlet);
+}
+
+// --- SHOW / HIDE LOADER (with fade) ---
+function showLoader(){
+  const loader=document.getElementById("loader");
+  loader.classList.add("active");
+}
+function hideLoader(){
+  const loader=document.getElementById("loader");
+  loader.classList.remove("active");
 }
 
 // --- LOAD CANDIDATES ---
@@ -127,7 +195,8 @@ async function loadCandidates(outlet){
       candidateList=json.data.kandidat||[];
       const list=document.getElementById("kandidatList");
       list.innerHTML=candidateList.map(n=>`<option value="${n}">`).join("");
-      document.getElementById("loader").classList.add("hidden");
+
+      hideLoader(); // ✅ hide after loaded
       document.getElementById("voteContainer").classList.remove("hidden");
       document.getElementById("userInfo").innerHTML="Masuk sebagai <b>"+userEmail+"</b>";
       document.getElementById("selectedOutlet").innerHTML="Outlet: <b>"+(outlet==="ML8"?"Master Load 8":"Master Grosir 8")+"</b>";
@@ -137,8 +206,8 @@ async function loadCandidates(outlet){
       throw new Error("Gagal memuat daftar kandidat.");
     }
   }catch(err){
+    hideLoader(); // ✅ ensure hidden on error
     showMessage("Gagal memuat kandidat: "+err.message,"error");
-    document.getElementById("loader").classList.add("hidden");
     document.getElementById("outletContainer").classList.remove("hidden");
   }
 }
@@ -194,9 +263,9 @@ document.getElementById("logout").onclick=
 document.getElementById("logout2").onclick=()=>{
   document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
   document.getElementById("loginContainer").classList.remove("hidden");
+  hideLoader(); // ✅ hide loader after logout
   googleIdToken="";userEmail="";currentOutlet="";candidateList=[];
 };
 </script>
 </body>
 </html>
-
