@@ -260,7 +260,7 @@ document.getElementById("btnKirim").addEventListener("click", async () => {
       setTimeout(() => {
         document.getElementById("voteContainer").classList.add("hidden");
         document.getElementById("outletContainer").classList.remove("hidden");
-      }, 2000);
+      }, 10000);
     } else if (json.ok && json.data.status === "sudah_vote") {
       showMessage(json.data.message, "error");
     } else {
@@ -293,3 +293,4 @@ document.getElementById("logout2").onclick = () => {
 </script>
 </body>
 </html>
+
